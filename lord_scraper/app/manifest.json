@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+
+    "permissions": [
+        "tabs", "http://*/*", "https://*/*"],
+
+    "name": "Tom Lord Scraper",
+    "description": "woo",
+    "version": "0.0.7",
+    "author": "David Su",
+
+    "content_scripts": [
+        {
+            "js": ["jquery-1.10.2.js", "scraper.js"],
+            "matches": ["*://*.lordisco.com.ezproxy.cul.columbia.edu/*"]
+        }
+    ]
+
+}
