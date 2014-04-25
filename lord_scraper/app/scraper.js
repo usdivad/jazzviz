@@ -102,6 +102,7 @@ for (var i=0; i<sessions.length; i++) {
 //console.log(dateObj);
 //return dateObj;
 var sendUrl = "http://usdivad.com/lord_scraper/collect.php";
+var failUrl = "http://usdivad.com/lord_scraper/fail.php";
 $.post(sendUrl, {"data": JSON.stringify(dateObj), "date_str": today}, function(resp) {
 	//alert(resp);
 	console.log(resp);
@@ -110,6 +111,12 @@ $.post(sendUrl, {"data": JSON.stringify(dateObj), "date_str": today}, function(r
 })
 .fail(function() {
 	console.log("FAIL");
+	$.get(failUrl, function() {
+		console.log("ok fail sent");
+	})
+	.fail(function() {console.log("... never mind. it's turtles");});
+	var newUrl = getNextUrl(today);
+	window.location.href = newUrl;
 });
 
 //Helpers
@@ -256,13 +263,13 @@ if (window.location.href.match("security") != null) {
 //Global reload
 window.setTimeout(function() {
 	window.location.reload();
-}, 5000);
+}, 3000 + Math.random()*2000);
 
 window.onload = function() { //has to be thru extension
 	sayHi();
 	window.setTimeout(function() {
 		scrape();
 		console.log("scrape");
-	}, 500 + Math.random()*1000);
+	}, 500 + Math.random()*1500);
 
 }
