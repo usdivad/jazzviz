@@ -106,7 +106,10 @@ $.post(sendUrl, {"data": JSON.stringify(dateObj), "date_str": today}, function(r
 	//alert(resp);
 	console.log(resp);
 	var newUrl = getNextUrl(today);
-	//window.location.href = newUrl;
+	window.location.href = newUrl;
+})
+.fail(function() {
+	console.log("FAIL");
 });
 
 //Helpers
@@ -250,13 +253,16 @@ if (window.location.href.match("security") != null) {
 	sendSecurityAlert();
 }*/
 
+//Global reload
+window.setTimeout(function() {
+	window.location.reload();
+}, 5000);
+
 window.onload = function() { //has to be thru extension
 	sayHi();
 	window.setTimeout(function() {
 		scrape();
 		console.log("scrape");
-	}, 500);
-	/*window.setTimeout(function() {
-		window.location.reload();
-	}, 5000);*/
+	}, 500 + Math.random()*1000);
+
 }

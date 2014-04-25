@@ -7,10 +7,10 @@
 
 	//JSON
 	$json = stripslashes($data);
-	$arr = json_decode($json, true);
-	var_dump($arr);
-	$n = $arr["a"];
-	echo $n;
+	// $arr = json_decode($json, true);
+	// var_dump($arr);
+	// $n = $arr["a"];
+	// echo $n;
 
 	//Text
 	$file = fopen('results/'.$date_str.'.json', 'w');
