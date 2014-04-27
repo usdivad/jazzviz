@@ -117,7 +117,7 @@ function Graph(div, width, height) {
         }
         console.log(dates);
         console.log(locations);
-        //findMusician("Duke Ellington");
+        findMusician("Duke Ellington");
 
     });
 
@@ -139,7 +139,7 @@ function Graph(div, width, height) {
                         var m = musicians[j];
                         m = m["name"];
                         if (typeof m != "undefined" && m != null && m.toUpperCase() === musician.toUpperCase()) {
-                            console.log("Found on " + date + " in " + session["location_str"]);
+                            console.log("Found " + musician + " on " + date + " in " + session["location_str"]);
                             count++;
                         }
                     }
@@ -332,16 +332,34 @@ function Graph(div, width, height) {
       .on("mouseover", function() {
         var coordinates = [0,0];
         coordinates = d3.mouse(this);
+        console.log(coordinates);
         var x = coordinates[0];
         var y= coordinates[1];
         d3.select(this).attr("opacity", 0.9);
-        graph.append("rect")
-            .attr("class", "tooltip")
-            .attr("width", 100)
-            .attr("height", 10)
+        var g = svg.append("g")
+                    .attr("class", "tooltip");
+
+        var tooltip = g.append("rect")
+                        .attr("width", 100)
+                        .attr("height", 50)
+                        .attr("x", x)
+                         .attr("y", y)
+                        //.attr("transform", "translate("+x+","+y+")")
+                        .attr("style", "fill:white;stroke:black;stroke-width:1px;");
+        tooltip.append("text")
+                .text("hehe");
+        g.append("text")
             .attr("x", x)
             .attr("y", y)
-            .attr("style", "fill:steelblue");
+            // .text(function(d) {
+            //     var str = d.id + ": ";
+            //     var countryCount = isoCounts[idMap[d.id].iso_code];
+            //     str += countryCount + " sessions";
+            //     return "asdfasdf";
+            //     //return str;
+            // });
+
+        console.log("HEY");
       })
       .on("mouseout", function() {
         d3.select(this).attr("opacity", 0.7);
