@@ -161,7 +161,8 @@ function Graph(div, width, height) {
     var sliderContainer = svg.append("foreignObject")
         .attr("width", width)
         .attr("height", 40)
-        .attr("transform", "translate(0,"+graphHeight+")")
+        .attr("position", "absolute")
+        .attr("transform", "translate(0,"+graphHeight+10+")")
           .append("xhtml:div")
           .attr("style", "user-select:none;-webkit-user-select:none;background:white;");
           //.html("hello");
@@ -304,6 +305,8 @@ function Graph(div, width, height) {
                 }
             } 
         }
+        console.log("sessionsInRange");
+        console.log(sessionsInRange[0]);
 
         //var count = count(ym);
 
@@ -315,20 +318,24 @@ function Graph(div, width, height) {
             for (name in ids) {
                 if (loc.match(name)) {
                     if (!isoCounts.hasOwnProperty(ids[name])) {
-                        isoCounts[ids[name]] = 1;
+                        isoCounts[ids[name]] = [loc];
                     }
                     else {
-                        isoCounts[ids[name]]++;
+                        isoCounts[ids[name]].push(loc);
                     }
                 }
             }
         }
 
+        //Tooltip
+        var tooltip_width = 100;
+        var tooltip_height = 50;
         var tooltip = d3.select("body")
                         .append("div")
+                        .attr("id", "tooltip")
                         .style("position", "absolute")
-                        .attr("width", 100)
-                        .attr("height", 50)
+                        .attr("width", tooltip_width) //not taking effect
+                        .attr("height", tooltip_height)
                         .style("background", "white")
                         .style("padding", 5)
                         .style("border", "1.5px solid")
@@ -337,12 +344,29 @@ function Graph(div, width, height) {
                         .style("visibility", "hidden")
                         .text("Louis Armstrong WUT");
 
+        var subtip = d3.select("body")
+                        .append("div")
+                        .style("position", "absolute")
+                        .attr("width", tooltip_width)
+                        .attr("height", tooltip_height)
+                        .style("background", "white")
+                        .style("padding", 5)
+                        .style("border", "1.5px solid")
+                        .style("z-index", "10")
+                        .style("opacity", 0.9)
+                        .attr("overflow", "scroll")
+                        .style("visibility", "hidden")
+                        .text("hp");
+
         //Fill in countries and their corresponding study functionalities
       d3.selectAll(".country")
           .attr("fill", function(d) {
             if (idMap[d.id]) {
               //console.log(idMap[d.id]);
-              var countryCount = isoCounts[idMap[d.id].iso_code];
+              var countryCount = 0;
+              if (isoCounts[idMap[d.id].iso_code]) {
+                countryCount = isoCounts[idMap[d.id].iso_code].length;
+              }
               if (countryCount > 0) {
                   console.log(countryCount);
                   //return "steelblue";
@@ -364,11 +388,12 @@ function Graph(div, width, height) {
             tooltip.html(function() {
                 if (idMap[d.id]) {
                   var countryName = idMap[d.id]["name"];
-                  var countryCount = isoCounts[idMap[d.id].iso_code];
-                  var sessions_noun = "sessions";
-                  if (!countryCount) {
-                    countryCount = 0;
+                  var countryCount = 0;
+                  if (isoCounts[idMap[d.id].iso_code]) {
+                    countryCount = isoCounts[idMap[d.id].iso_code].length;
                   }
+                  
+                  var sessions_noun = "sessions";
                   if (countryCount == 1) {
                     sessions_noun = "session";
                   }
@@ -383,11 +408,40 @@ function Graph(div, width, height) {
                   return str;
                   //return countryName + ": " + countryCount + " " + sessions_noun + " on " + ym_display;
                 }
-              })
+              });
+            subtip.html("");
+
+            subtip.html(function() {
+              str = "";
+              for (var i=0; i<sessionsInRange.length; i++) {
+                var session = sessionsInRange[i];
+                if (locationsInRange.indexOf(session["location_str"]) > -1) {
+                  str += session["leader"] + " ";
+                  // if (session["musicians"].length > 0) {
+                  //   str += "with "
+                  //   for (mus in session["musicians"]) {
+                  //     str + 
+                  //   }
+                  // }
+                  str += "at " + session["location_str"];
+                  str += "<br>";
+                }
+              }
+              return str;
+            })
+
             tooltip.style("visibility", "visible");
+            subtip.style("visibility", "visible");
           })
-          .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-          .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+          .on("mousemove", function(){
+            tw = document.getElementById("tooltip").offsetWidth + 9;
+            tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+            subtip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+tw)+"px");
+          })
+          .on("mouseout", function(){
+            tooltip.style("visibility", "hidden");
+            subtip.style("visibility", "hidden");
+          });
 
         console.log(isoCounts);
 
