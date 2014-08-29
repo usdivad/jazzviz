@@ -118,6 +118,7 @@ function Graph(div, width, height) {
         console.log(dates);
         console.log(locations);
         findMusician("Duke Ellington");
+        onRangeInput(1);
 
     });
 
@@ -199,6 +200,14 @@ function Graph(div, width, height) {
       })
       .attr("title", "Slide across dates!");
 
+
+    // console.log(slider);
+    //slider[0][0].fireEvent("onchange");
+    // window.setTimeout(function() {
+    //   console.log("asdf");
+    //   onRangeInput(1);
+    // }, 1500);
+
     //on date change
     function onRangeInput(rangeVal) {
       //var monthNames = [ "January", "February", "March", "April", "May", "June",
@@ -206,7 +215,7 @@ function Graph(div, width, height) {
       var maxDateOffset = 0;
       var startDate = "1/1/1918";
       var startYear = 1918;
-      var endYear = 1955;
+      var endYear = 1954.67; //fudging to make the last date August 1953
       var day = Math.floor(rangeVal * (365 * (endYear-startYear))); // 0 to (365-maxDateOffset) inclusive
       //console.log("day is " + day);
       var date = new Date(startDate);
@@ -1692,5 +1701,6 @@ function getIdMap() {
   
   return ids;
 }
+
 
 }
