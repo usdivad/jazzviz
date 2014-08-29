@@ -48,8 +48,8 @@ function Graph(div, width, height) {
                         .style("z-index", "10")
                         .style("opacity", 0.9)
                         .style("visibility", "visible")
-                        .style("top", (height/2)+"px").style("left",(width-120)+"px")
-                        .text("Loading...");
+                        .style("top", (height/2)+"px").style("left",(width-150)+"px")
+                        .text("Loading session data...");
 
     //the country data
     d3.json("data/world-110m.json", function(error, world) {
