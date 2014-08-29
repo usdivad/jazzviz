@@ -280,14 +280,22 @@ function Graph(div, width, height) {
         var ym = ymArr.join("-");
         console.log(ym)
 
+        //Getting session and loc data for this month
+        var sessionsInRange = [];
         var locationsInRange = [];
         for (date in dates) {
             //console.log(date + " " + ym);
             if (date.match(ym)) {
-                var session = dates[date][0];
-                locationsInRange.push(session["location_str"]);
+                var sessions_today = dates[date];
+                //console.log(dates[date]);
+                for (var i=0; i<sessions_today.length; i++) {
+                  var session = sessions_today[i];
+                  locationsInRange.push(session["location_str"]);
+                  sessionsInRange.push(session);
+                }
             } 
         }
+
         //var count = count(ym);
 
 
@@ -313,10 +321,12 @@ function Graph(div, width, height) {
                         .attr("width", 100)
                         .attr("height", 50)
                         .style("background", "white")
-
+                        .style("padding", 5)
+                        .style("border", "1.5px solid")
                         .style("z-index", "10")
+                        .style("opacity", 0.9)
                         .style("visibility", "hidden")
-                        .text("hsllo");
+                        .text("Louis Armstrong WUT");
 
         //Fill in countries and their corresponding study functionalities
       d3.selectAll(".country")
@@ -342,20 +352,27 @@ function Graph(div, width, height) {
             }
           })
           .on("mouseover", function(d) {
-            tooltip.text(function() {
+            tooltip.html(function() {
                 if (idMap[d.id]) {
                   var countryName = idMap[d.id]["name"];
                   var countryCount = isoCounts[idMap[d.id].iso_code];
-                  var sessions_display = "sessions";
+                  var sessions_noun = "sessions";
                   if (!countryCount) {
                     countryCount = 0;
                   }
                   if (countryCount == 1) {
-                    sessions_display = "session";
+                    sessions_noun = "session";
                   }
 
                   var ym_display = monthNames[ymArr[1]-1] + " " + ymArr[0];
-                  return countryName + ": " + countryCount + " " + sessions_display + " on " + ym_display;
+
+                  //Displaying the text
+                  var str = "";
+                  str += "<b>" + countryName + "</b><br>";
+                  str += countryCount + " " + sessions_noun;
+
+                  return str;
+                  //return countryName + ": " + countryCount + " " + sessions_noun + " on " + ym_display;
                 }
               })
             tooltip.style("visibility", "visible");
