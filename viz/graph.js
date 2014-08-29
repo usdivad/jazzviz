@@ -392,7 +392,7 @@ function Graph(div, width, height) {
                   if (isoCounts[idMap[d.id].iso_code]) {
                     countryCount = isoCounts[idMap[d.id].iso_code].length;
                   }
-                  
+
                   var sessions_noun = "sessions";
                   if (countryCount == 1) {
                     sessions_noun = "session";
@@ -411,27 +411,34 @@ function Graph(div, width, height) {
               });
             subtip.html("");
 
+            subtip_str = "";
             subtip.html(function() {
-              str = "";
+              var locationsInCountry = [];
+              if (isoCounts[idMap[d.id].iso_code]) {
+                locationsInCountry = isoCounts[idMap[d.id].iso_code];
+              }
+
               for (var i=0; i<sessionsInRange.length; i++) {
                 var session = sessionsInRange[i];
-                if (locationsInRange.indexOf(session["location_str"]) > -1) {
-                  str += session["leader"] + " ";
+                if (locationsInCountry.indexOf(session["location_str"]) > -1) {
+                  subtip_str += session["leader"] + " ";
                   // if (session["musicians"].length > 0) {
-                  //   str += "with "
+                  //   subtip_str += "with "
                   //   for (mus in session["musicians"]) {
-                  //     str + 
+                  //     subtip_str + 
                   //   }
                   // }
-                  str += "at " + session["location_str"];
-                  str += "<br>";
+                  subtip_str += "at " + session["location_str"];
+                  subtip_str += "<br>";
                 }
               }
-              return str;
+              return subtip_str;
             })
 
             tooltip.style("visibility", "visible");
-            subtip.style("visibility", "visible");
+            if (subtip_str.length > 0) {
+              subtip.style("visibility", "visible");
+            }
           })
           .on("mousemove", function(){
             tw = document.getElementById("tooltip").offsetWidth + 9;
