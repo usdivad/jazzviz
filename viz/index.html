@@ -1,6 +1,7 @@
 <html>
     <meta charset="utf-8">
     <head>
+        <title>Recorded Jazz Around the World 1917-1953</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -12,6 +13,17 @@
                 width: 800px;
                 height: 700px;
                 background-color: white;
+            }
+            #title-container {
+                background-color: white;
+                width: 800px;
+                margin: 0 auto;
+                text-align: center;
+                /*padding: 1 0 6 0;*/
+                padding-top: 1px;
+            }
+            #title-text {
+                padding: 0 100;
             }
             .sphere {
                 fill: #fff;
@@ -37,6 +49,14 @@
         </style>
     </head>
     <body>
+        <div id="title-container">
+            <h1>Jazz Recording Sessions Around the World (1917-1953)</h1>
+            <div id="title-text">
+            Visualize the geography of recorded jazz sessions over time! Use the slider to change dates and mouse over countries to see session details. Click and drag across the globe to change view. By <a href="http://usdivad.com" target="_blank">David Su</a>.
+            <!--<br><br>
+            <span style="color:green;">Green</span> = more sessions, <span style="color:red;">red</span> = fewer sessions.-->
+            </div>
+        </div>
         <div id="graph"></div>
         <script src="lib/d3.min.js"></script>
         <script src="lib/d3.geo.zoom.js"></script>
