@@ -35,8 +35,25 @@ function Graph(div, width, height) {
         .datum(graticule)
         .attr("class", "graticule")
         .attr("d", path);
+
+  var loading = d3.select("body")
+                        .append("div")
+                        .attr("id", "tooltip")
+                        .style("position", "absolute")
+                        //.style("width", tooltip_width)
+                        //.style("height", tooltip_height)
+                        .style("background", "white")
+                        .style("padding", 5)
+                        .style("border", "1.5px solid")
+                        .style("z-index", "10")
+                        .style("opacity", 0.9)
+                        .style("visibility", "visible")
+                        .style("top", (height/2)+"px").style("left",(width-120)+"px")
+                        .text("Loading...");
+
     //the country data
     d3.json("data/world-110m.json", function(error, world) {
+        loading.style("visibility", "hidden");
         console.log(world);
         /*svg.append("path")
             .datum(topojson.feature(world, world.objects.land))
