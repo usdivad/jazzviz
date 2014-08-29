@@ -153,6 +153,8 @@ function Graph(div, width, height) {
     /**DATES**/   
     var graphWidth = (width-2*margin) * 0.9;
     var graphHeight = height-2*margin;
+    var monthNames = [ "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December" ];
 
     // Date slider
     var sliderContainer = svg.append("foreignObject")
@@ -199,8 +201,8 @@ function Graph(div, width, height) {
 
     //on date change
     function onRangeInput(rangeVal) {
-      var monthNames = [ "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December" ];
+      //var monthNames = [ "January", "February", "March", "April", "May", "June",
+      //  "July", "August", "September", "October", "November", "December" ];
       var maxDateOffset = 0;
       var startDate = "1/1/1918";
       var startYear = 1918;
@@ -305,71 +307,114 @@ function Graph(div, width, height) {
             }
         }
 
+        var tooltip = d3.select("body")
+                        .append("div")
+                        .style("position", "absolute")
+                        .attr("width", 100)
+                        .attr("height", 50)
+                        .style("background", "white")
+
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+                        .text("hsllo");
 
         //Fill in countries and their corresponding study functionalities
       d3.selectAll(".country")
           .attr("fill", function(d) {
-          if (idMap[d.id]) {
-            //console.log(idMap[d.id]);
-            var countryCount = isoCounts[idMap[d.id].iso_code];
-            if (countryCount > 0) {
-                console.log(countryCount);
-                //return "steelblue";
-                return colorScale(countryCount);
+            if (idMap[d.id]) {
+              //console.log(idMap[d.id]);
+              var countryCount = isoCounts[idMap[d.id].iso_code];
+              if (countryCount > 0) {
+                  console.log(countryCount);
+                  //return "steelblue";
+                  return colorScale(countryCount);
+              }
+              // //console.log(dataArr);
+              // if ((typeof dataArr != 'undefined') && dataArr[0]) {
+              // console.log("iso code " + idMap[d.id].iso_code);
+              // console.log(dataArr);
+              //   return getColorFromClass(dataArr[0].study_class);
+              // } else {
+              //   return "#aaa";
+              // }
+            } else {
+              return "gray";
             }
-            // //console.log(dataArr);
-            // if ((typeof dataArr != 'undefined') && dataArr[0]) {
-            // console.log("iso code " + idMap[d.id].iso_code);
-            // console.log(dataArr);
-            //   return getColorFromClass(dataArr[0].study_class);
-            // } else {
-            //   return "#aaa";
-            // }
-          } else {
-            return "gray";
-          }
-      })
-      .on("mouseover", function() {
-        var coordinates = [0,0];
-        coordinates = d3.mouse(this);
-        console.log(coordinates);
-        var x = coordinates[0];
-        var y= coordinates[1];
-        d3.select(this).attr("opacity", 0.9);
-        var g = svg.append("g")
-                    .attr("class", "tooltip");
+          })
+          // .append("svg:title")
+          // .text(function(d) {
+          //   return d.id;
+          // });
+          .on("mouseover", function(d) {
+            tooltip.text(function() {
+                if (idMap[d.id]) {
+                  var countryName = idMap[d.id]["name"];
+                  var countryCount = isoCounts[idMap[d.id].iso_code];
+                  var sessions_display = "sessions";
+                  if (!countryCount) {
+                    countryCount = 0;
+                  }
+                  if (countryCount == 1) {
+                    sessions_display = "session";
+                  }
 
-        var tooltip = g.append("rect")
-                        .attr("width", 100)
-                        .attr("height", 50)
-                        .attr("x", x)
-                         .attr("y", y)
-                        //.attr("transform", "translate("+x+","+y+")")
-                        .attr("style", "fill:white;stroke:black;stroke-width:1px;");
-        tooltip.append("text")
-                .text("hehe");
-        g.append("text")
-            .attr("x", x)
-            .attr("y", y)
-            // .text(function(d) {
-            //     var str = d.id + ": ";
-            //     var countryCount = isoCounts[idMap[d.id].iso_code];
-            //     str += countryCount + " sessions";
-            //     return "asdfasdf";
-            //     //return str;
-            // });
+                  var ym_display = monthNames[ymArr[1]-1] + " " + ymArr[0];
+                  return countryName + ": " + countryCount + " " + sessions_display + " on " + ym_display;
+                }
+              })
+            tooltip.style("visibility", "visible");
+          })
+          .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+          .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
-        console.log("HEY");
-      })
-      .on("mouseout", function() {
-        d3.select(this).attr("opacity", 0.7);
-        graph.selectAll(".tooltip").remove();
-      });
+
+      // .on("mouseover", function() {
+      //   var coordinates = [0,0];
+      //   coordinates = d3.mouse(this);
+      //   console.log(coordinates);
+      //   var x = coordinates[0];
+      //   var y= coordinates[1];
+      //   d3.select(this).attr("opacity", 0.9);
+      //   var g = svg.append("g")
+      //               .attr("class", "tooltip");
+
+      //   var tooltip = g.append("rect")
+      //                   .attr("width", 100)
+      //                   .attr("height", 50)
+      //                   .attr("x", x)
+      //                    .attr("y", y)
+      //                   //.attr("transform", "translate("+x+","+y+")")
+      //                   .attr("style", "fill:white;stroke:black;stroke-width:1px;");
+      //   tooltip.append("text")
+      //           .text("hehe");
+      //   g.append("text")
+      //       .attr("x", x)
+      //       .attr("y", y)
+      //       .text(function() {
+      //           console.log("yo");
+      //           console.log(d);
+      //           // var str = d.id + ": ";
+      //           var str = "";
+      //           //var countryCount = isoCounts[idMap[d.id].iso_code];
+      //           //str += countryCount + " sessions";
+      //           //return "asdfasdf";
+      //           return str;
+      //       });
+
+      //   console.log("HEY");
+      // })
+      // .on("mouseout", function() {
+      //   d3.select(this).attr("opacity", 0.7);
+      //   graph.selectAll(".tooltip").remove();
+      // });
+
+
+
         console.log(isoCounts);
 
         console.log(locationsInRange.length + " locations in " + dt);
         console.log(locationsInRange);
-    }
+    } //end drawColors
 
     function count(yearMonth) {
 
