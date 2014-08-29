@@ -1,0 +1,71 @@
+<html>
+    <meta charset="utf-8">
+    <head>
+        <title>Recorded Jazz Around the World 1917-1953</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                background-color: gray;
+            }
+            #graph {
+                margin: 0 auto;
+                width: 800px;
+                height: 700px;
+                background-color: white;
+            }
+            #title-container {
+                background-color: white;
+                width: 800px;
+                margin: 0 auto;
+                text-align: center;
+                /*padding: 1 0 6 0;*/
+                padding-top: 1px;
+            }
+            #title-text {
+                padding: 0 100;
+            }
+            .sphere {
+                fill: #fff;
+            }
+            .graticule {
+                fill: none;
+                stroke: #777;
+                stroke-width: 0.5px;
+                stroke-opacity: 0.5;
+            }
+            .land {
+                fill: gray;
+            }
+            .boundary {
+                fill: none;
+                stroke: #fff;
+                stroke-width: 0.5px;
+            }
+            #graph.zooming {
+                cursor: -webkit-grab;
+                cursor: -moz-grab;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="title-container">
+            <h1>Jazz Recording Sessions Around the World (1945)</h1>
+            <div id="title-text">
+            Visualize the geography of recorded jazz sessions over time! Use the slider to change dates and mouse over countries to see session details. Click and drag across the globe to change map position. By <a href="http://usdivad.com" target="_blank">David Su</a>.
+            <!--<br><br>
+            <span style="color:green;">Green</span> = more sessions, <span style="color:red;">red</span> = fewer sessions.-->
+            </div>
+        </div>
+        <div id="graph"></div>
+        <script src="lib/d3.min.js"></script>
+        <script src="lib/d3.geo.zoom.js"></script>
+        <script src="lib/topojson.v1.min.js"></script>
+        <script src="mini_graph.js"></script>
+        <script>
+            (function() {
+                var graph = new Graph(document.getElementById("graph"), 820, 700);
+            })();
+        </script>
+    </body>
+</html>
