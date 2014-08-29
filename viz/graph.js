@@ -247,6 +247,7 @@ function Graph(div, width, height) {
           .attr("width", 100)
           .attr("height", 20)
           .attr("id", "dispDateSpan")
+          .style("z-index", "20")
           .style("display", null)
           .text("");
       //var dispDateSpan = div.select("dispDateSpan");
@@ -329,13 +330,13 @@ function Graph(div, width, height) {
 
         //Tooltip
         var tooltip_width = 100;
-        var tooltip_height = 50;
+        var tooltip_height = 25;
         var tooltip = d3.select("body")
                         .append("div")
                         .attr("id", "tooltip")
                         .style("position", "absolute")
-                        .attr("width", tooltip_width) //not taking effect
-                        .attr("height", tooltip_height)
+                        //.style("width", tooltip_width)
+                        //.style("height", tooltip_height)
                         .style("background", "white")
                         .style("padding", 5)
                         .style("border", "1.5px solid")
@@ -347,14 +348,14 @@ function Graph(div, width, height) {
         var subtip = d3.select("body")
                         .append("div")
                         .style("position", "absolute")
-                        .attr("width", tooltip_width)
-                        .attr("height", tooltip_height)
+                        //.style("width", tooltip_width)
+                        //.style("height", tooltip_height)
+                        //.style("overflow", "scroll")
                         .style("background", "white")
                         .style("padding", 5)
                         .style("border", "1.5px solid")
                         .style("z-index", "10")
                         .style("opacity", 0.9)
-                        .attr("overflow", "scroll")
                         .style("visibility", "hidden")
                         .text("hp");
 
@@ -404,13 +405,15 @@ function Graph(div, width, height) {
                   var str = "";
                   str += "<b>" + countryName + "</b><br>";
                   str += countryCount + " " + sessions_noun;
+                  //str += " on " + ym_display;
 
                   return str;
                   //return countryName + ": " + countryCount + " " + sessions_noun + " on " + ym_display;
                 }
               });
-            subtip.html("");
 
+            //Sub-tooltip!
+            subtip.html("");
             subtip_str = "";
             subtip.html(function() {
               var locationsInCountry = [];
@@ -421,31 +424,40 @@ function Graph(div, width, height) {
               for (var i=0; i<sessionsInRange.length; i++) {
                 var session = sessionsInRange[i];
                 if (locationsInCountry.indexOf(session["location_str"]) > -1) {
-                  subtip_str += session["leader"] + " ";
+                  var artist = session["leader"];
+                  if (session["group"]) {
+                    artist = session["group"];
+                  }
+                  subtip_str += "<u>" + artist + "</u> ";
                   // if (session["musicians"].length > 0) {
                   //   subtip_str += "with "
                   //   for (mus in session["musicians"]) {
                   //     subtip_str + 
                   //   }
                   // }
-                  subtip_str += "at " + session["location_str"];
+                  subtip_str += "in " + session["location_str"];
                   subtip_str += "<br>";
                 }
               }
               return subtip_str;
             })
 
+            //Stylin
             tooltip.style("visibility", "visible");
             if (subtip_str.length > 0) {
               subtip.style("visibility", "visible");
             }
           })
           .on("mousemove", function(){
-            tw = document.getElementById("tooltip").offsetWidth + 9;
+            //Stylin
+            tw_offset = 9;
+            tw = document.getElementById("tooltip").offsetWidth + tw_offset;
+            //console.log(tw);
             tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
             subtip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+tw)+"px");
           })
           .on("mouseout", function(){
+            //Stylin
             tooltip.style("visibility", "hidden");
             subtip.style("visibility", "hidden");
           });
