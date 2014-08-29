@@ -53,7 +53,6 @@ function Graph(div, width, height) {
 
     //the country data
     d3.json("data/world-110m.json", function(error, world) {
-        loading.style("visibility", "hidden");
         console.log(world);
         /*svg.append("path")
             .datum(topojson.feature(world, world.objects.land))
@@ -121,6 +120,10 @@ function Graph(div, width, height) {
     var locations = [];
     var noIsos = [];
     d3.json("data/dates.json", function(error, datesObj) {
+        if (!datesObj["dates"]) {
+          loading.html("Sorry, data retrieval failed.<br>Please try again by refreshing.");
+          this.exit("failed to load data");
+        }
         var datesArr = datesObj["dates"];
         console.log(datesArr);
         for (var i=0; i<datesArr.length; i++) {
@@ -137,7 +140,7 @@ function Graph(div, width, height) {
         console.log(locations);
         findMusician("Duke Ellington");
         onRangeInput(1);
-
+        loading.style("visibility", "hidden");
     });
 
 
