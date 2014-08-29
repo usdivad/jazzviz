@@ -21,6 +21,7 @@ function Graph(div, width, height) {
     var projection = d3.geo.orthographic()
         .scale(300)
         .translate([width/2, height/2])
+        .rotate([60,-30,0]) //default map position
         .clipAngle(90);
     var path = d3.geo.path()
         .projection(projection);
