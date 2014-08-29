@@ -341,10 +341,6 @@ function Graph(div, width, height) {
               return "gray";
             }
           })
-          // .append("svg:title")
-          // .text(function(d) {
-          //   return d.id;
-          // });
           .on("mouseover", function(d) {
             tooltip.text(function() {
                 if (idMap[d.id]) {
@@ -366,49 +362,6 @@ function Graph(div, width, height) {
           })
           .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
           .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-
-
-      // .on("mouseover", function() {
-      //   var coordinates = [0,0];
-      //   coordinates = d3.mouse(this);
-      //   console.log(coordinates);
-      //   var x = coordinates[0];
-      //   var y= coordinates[1];
-      //   d3.select(this).attr("opacity", 0.9);
-      //   var g = svg.append("g")
-      //               .attr("class", "tooltip");
-
-      //   var tooltip = g.append("rect")
-      //                   .attr("width", 100)
-      //                   .attr("height", 50)
-      //                   .attr("x", x)
-      //                    .attr("y", y)
-      //                   //.attr("transform", "translate("+x+","+y+")")
-      //                   .attr("style", "fill:white;stroke:black;stroke-width:1px;");
-      //   tooltip.append("text")
-      //           .text("hehe");
-      //   g.append("text")
-      //       .attr("x", x)
-      //       .attr("y", y)
-      //       .text(function() {
-      //           console.log("yo");
-      //           console.log(d);
-      //           // var str = d.id + ": ";
-      //           var str = "";
-      //           //var countryCount = isoCounts[idMap[d.id].iso_code];
-      //           //str += countryCount + " sessions";
-      //           //return "asdfasdf";
-      //           return str;
-      //       });
-
-      //   console.log("HEY");
-      // })
-      // .on("mouseout", function() {
-      //   d3.select(this).attr("opacity", 0.7);
-      //   graph.selectAll(".tooltip").remove();
-      // });
-
-
 
         console.log(isoCounts);
 
